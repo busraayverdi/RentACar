@@ -1,4 +1,5 @@
 ﻿using Application.Features.Brands.Dtos;
+using Application.Features.Brands.Rules;
 using Application.Features.Repositories;
 using AutoMapper;
 using Domain.Entities;
@@ -19,19 +20,26 @@ namespace Application.Features.Brands.Commands.CreateBrand
         {
             private readonly IBrandRepository _brandRepository;
             private readonly IMapper _mapper;
+            private readonly BrandBusinessRules _brandBuisnessRules;
 
-            public CreateBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper)
+            public CreateBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper,
+                BrandBusinessRules brandBuisnessRules)
             {
                 _brandRepository=brandRepository;
                 _mapper=mapper;
+                _brandBuisnessRules=brandBuisnessRules;
             }
 
             public async Task<CreatedBrandDto> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
             {
-                Brand mappedBrand = _mapper.Map<Brand>(request);
+
+                await _brandBuisnessRules.BrandNameCanNotBeDuplicatedWhenInserted(request.Name); //exception
+
+                Brand mappedBrand = _mapper.Map<Brand>(request);   //data 
                 Brand createdBrand = await _brandRepository.AddAsync(mappedBrand);
                 CreatedBrandDto createdBrandDto = _mapper.Map<CreatedBrandDto>(createdBrand);
-                return createdBrandDto;
+
+                return createdBrandDto;//dönüş
 
             }
         }

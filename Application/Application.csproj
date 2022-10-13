@@ -9,13 +9,13 @@
   <ItemGroup>
     <Folder Include="Features\Brands\Constants\" />
     <Folder Include="Features\Brands\Models\" />
-    <Folder Include="Features\Brands\Rules\" />
     <Folder Include="Features\Brands\Queries\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\src\corePackages\Core.CrossCuttingConcers\Core.CrossCuttingConcerns.csproj" />
   </ItemGroup>
 
   <ItemGroup>
